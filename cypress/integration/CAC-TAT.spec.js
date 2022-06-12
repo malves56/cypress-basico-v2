@@ -9,16 +9,21 @@ describe('Central de Atendimento ao Cliente TAT', function() {
         cy.title().should('be.equal','Central de Atendimento ao Cliente TAT')
     })
 
-    it('preenche os campos obrigatórios e envia o formulário', function() {
+    it.only('preenche os campos obrigatórios e envia o formulário', function() {
         const longtext = 'Neste sentido, a contínua expansão de nossa atividade deve passar por modificações independentemente das diretrizes de desenvolvimento para o futuro.'
         
+        cy.clock()
+
         cy.get('#firstName').type('Maydson')
         cy.get('#lastName').type('Ribeiro')
-        cy.get('#email').type('maydson.alves@yahoo.com.br')
+        cy.get('#email').type('maydson.alves@yahoo.com')
         cy.get('#open-text-area').type(longtext, { delay: 0 })
         cy.contains('button','Enviar').click()
 
         cy.get('.success').should('be.visible')
+
+        cy.tick(3000)
+        cy.get('.success').should('not.be.visible')
     })
 
     it('exibe mensagem de erro ao submeter o formulário com um email com formatação inválida', function() {
@@ -81,13 +86,21 @@ describe('Central de Atendimento ao Cliente TAT', function() {
     })
 
     it('envia o formuário com sucesso usando um comando customizado', function() {
+        cy.clock()
         cy.fillMandatoryFieldsAndSubmit()
         cy.get('.success').should('be.visible')
+
+        cy.tick(3000)
+        cy.get('.success').should('not.be.visible')
     })
 
     it('Exercicio 08', function() {
+        cy.clock()
         cy.fillMandatoryFieldsAndSubmit()
         cy.get('.success').should('be.visible')
+
+        cy.tick(3000)
+        cy.get('.success').should('not.be.visible')
     })
 
     it('seleciona um produto (YouTube) por seu texto', function() {
@@ -135,11 +148,15 @@ describe('Central de Atendimento ao Cliente TAT', function() {
     })
 
     it('exibe mensagem de erro quando o telefone se torna obrigatório mas não é preenchido antes do envio do formulário', function() {
+        cy.clock()
         cy.get('input[type="checkbox"]')
             .last()
             .check()
         cy.contains('button','Enviar').click()
         cy.get('.error').should('be.visible')
+
+        cy.tick(3000)
+        cy.get('.error').should('not.be.visible')
     })
 
     it('seleciona um arquivo da pasta fixtures', function() {
@@ -188,6 +205,5 @@ describe('Central de Atendimento ao Cliente TAT', function() {
         cy.contains('Talking About Testing'). should('be.visible')
     })
 
-    
 
 })
